@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/nomats/asanaWrap/issues"
   },
-  "homepage": "https://github.com/nomats/asanaWrap#readme"
+  "homepage": "https://github.com/nomats/asanaWrap#readme",
+  "devDependencies": {
+    "jest": "^24.8.0"
+  }
 }
