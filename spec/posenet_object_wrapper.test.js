@@ -1,5 +1,5 @@
 const sample = require("./posenet_sample_data/mountain_pose_test_sample.js");
-const PosenetObjectWrapper = require("../lib/posenet_object_wrapper.js");
+const PosenetObjectWrapper = require("../lib/posenet_object_wrapper/main.js");
 
 
 it("#bodypart can get nose position", () => {
@@ -153,5 +153,4 @@ it("#bodypart can get rightAnkle position", () => {
     x: 849.9319304468231,
     y: 882.6055469670201
   });
-  console.log(subject.bodypart("rightAnkle").position);
 });
