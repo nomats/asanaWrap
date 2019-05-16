@@ -79,3 +79,43 @@ it('MathModel#isVertical can deduce non-vertical lines', () => {
   expect(_mm.isVertical([{x: 50, y: -1},{x: 30,y: 1},{x: 46,y: 3},{x: 51,y: 5},
      {x: 53, y:7}, {x: 72, y:9}],5)).toEqual(false)
 });
+
+
+var subject;
+describe("MathModel#_isPointBetween", ()=>{
+  beforeEach(()=>{
+    subject = new MathModel()
+  })
+
+  it("correctly evaluates true examples", () => {
+    expect(subject.isPointBetween(5,[3,7])).toEqual(true)
+  })
+
+  it("correctly evaluates true examples with negative numbers", () => {
+    expect(subject.isPointBetween(3,[-2,7])).toEqual(true)
+  })
+
+  it("correctly evaluates true examples", () => {
+    expect(subject.isPointBetween(50,[0,100])).toEqual(true)
+  })
+
+  it("correctly evaluates true examples with negative numbers", () => {
+    expect(subject.isPointBetween(-5,[-1,-10])).toEqual(true)
+  })
+
+  it("correctly evaluates false examples", () => {
+    expect(subject.isPointBetween(1,[3,7])).toEqual(false)
+  })
+
+  it("correctly evaluates true examples with negative numbers", () => {
+    expect(subject.isPointBetween(-3,[-2,7])).toEqual(false)
+  })
+
+  it("correctly evaluates true examples", () => {
+    expect(subject.isPointBetween(-1,[0,100])).toEqual(false)
+  })
+
+  it("correctly evaluates true examples with negative numbers", () => {
+    expect(subject.isPointBetween(0,[-1,-10])).toEqual(false)
+  })
+})
