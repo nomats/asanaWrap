@@ -65,4 +65,11 @@ describe("PoseCheckerConstructor#_isHorizontal", ()=>{})
 
 describe("PoseCheckerConstructor#_isStacked", ()=>{})
 
-describe("PoseCheckerConstructor#_calculateAngle", ()=>{})
+describe("PoseCheckerConstructor#_calculateAngle", ()=>{
+  it("can calculate angle correctly",()=>{
+    expect(subject._calculateAngle({x: 12, y: 5},{x: 0, y: 0},{x: 12, y: 0})).toEqual(23)
+  })
+  it("can calculate angle correctly",()=>{
+    expect(subject._calculateAngle({x: 2, y: 0},{x: 0, y: 2},{x: 5, y: 5})).toEqual(76)
+  })
+})
