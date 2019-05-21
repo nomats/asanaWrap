@@ -19,9 +19,15 @@ Checker methods must return the form of XXXXXXX.
 ## Testing + Sample Data
 ## Importing into `Pose`
 ## Strictness
-### `bodypart`
+### `bodypart(bodypartName)`
 `bodypart` is a handy wrapper which makes it easy to make calls to the original Posenet object for the position hashes of different body parts.
 
+#### Typical usage
+```
+wrappedPosenetObject.bodypart("nose").position
+ => {x:55, y:97}
+```
+#### Implementation
 In the scope of writing a `checker()` function, `bodypart` is callable on the wrappedPosenetObject. an Example from `/lib/pose_checkers/warrior_two.js`:
 ```
 class WarriorTwoCheckerConstructor extends PoseCheckerConstructor {
@@ -38,6 +44,27 @@ class WarriorTwoCheckerConstructor extends PoseCheckerConstructor {
       ],
       15
     );
+    ...
+```
+#### List of `bodypartName`s
+```
+"nose"
+"leftEye"
+"rightEye"
+"leftEar"
+"rightEar"
+"leftShoulder"
+"rightShoulder"
+"leftElbow"
+"rightElbow"
+"leftWrist"
+"rightWrist"
+"leftHip"
+"rightHip"
+"leftKnee"
+"rightKnee"
+"leftAnkle"
+"rightAnkle"
 ```
 
 ### `PoseCheckerConstructor` helper methods
