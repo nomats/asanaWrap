@@ -10,21 +10,44 @@ A pose checker is a function which when called on a `PosenetObjectWrapper` insta
 
  Almost all of this is pre-provided, so adding a new pose checker primarily consists of **developing a new implementation for `checker()` which determines true or false for your chosen pose.**
 
-Creating a new pose checker function consists of the following steps:
+Create a new pose checker function with the following steps:
 - creating the file and Extending the class
 - creating unit tests / sample data for your checker (you can do the next step first if you aren't a TDD fan)
-- implementing your checker
+- implementing your checker (factoring return formatting)
 - adding it to the main Pose
+- don't break any tests and make a pull request! :)
 
-All pose checker functions are created by `CheckerConstructor` classes. To add a pose, create a new `CheckerConstructor` class in `/lib/pose_checkers` which extends the class `PoseCheckerConstructor`, found in `/lib/pose_checkers/pose_checker_constructor.js`.
+#### Creating a new `CheckerConstructor` file
+1. Copy THE TEMPLATE file in `/contributor_resources/template_checker_constructor.js` into `/lib/pose_checkers`
+2. Rename the file `*_checker_constructor.js`, where `*` is the name of your pose in snake case.
+3. Rename all instances of `TemplateCheckerConstructor` with `*CheckerConstructor` where `*` is your pose name. Make sure it's in PascalCase.
+#### Creating sample data and unit tests
 
-- An easy to use template can be found in `/contributor_resources/template_checker_constructor.js`, but note that **the file must be copied to the correct directory**.
+#### Implementing your checker
+Now it's time for the creative bit! Once inside the `checker()` function, you can make calls to get different bodyparts' positional hashes with `wrappedPosenetObject.bodypart("nose").position`. Use this in conjunction with the inherited HELPER FUNCTIONS to write a series of checks which determine if the pose is correct or not. If you're having trouble, check out other examples to see ways `checker()` has been implemented. **Make sure `checker()` returns an OBJECT OF THE CORRECT FORMAT**
 
-Change the `Template` in `TemplateCheckerConstructor` to the name of the yoga pose you have chosen. Naming convention follows javascript's XXXXX case for class names.
+#### Adding your checker to `pose.js`
+Finally, add your checker to `/lib/pose.js` in the following format:
+```
+//Poses --->
+...
+const _*Checker = require('./pose_checkers/*_checker_constructor.js')
+// <----- Poses
 
-Change the contents of the `checker` function to implement your pose checks, making sure your function's output is in-keeping with convention, and your pose is ready to be imported into `Pose`! Nice!
+class Pose {
+  constructor(posenetObject){
+    this.wrappedPosenetObject = new PosenetObjectWrapper(posenetObject)
+  }
+  ...
+  is*(){
+    return _*Checker(this.wrappedPosenetObject)
+  }
+}
+```
+where all instances of `*` is **your checker name in camel case**.
 
-There are a number of helpers to make implementing your pose easier, so make sure to read the section on BODYPART and POSECHECKERCONSTRUCTOR helper methods, and take a look at some of the pre-existing `CheckerCondtructors` to get you started.
+#### Pull request
+Lastly, make sure your new unit tests all pass, and make a pull request to dev!
 
 ## Implementation Convention
 Checker methods must return the form of XXXXXXX.
