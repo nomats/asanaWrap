@@ -1,3 +1,2 @@
-module.exports = () => {
-  return "Hello world, welcome to the demo package"
-}
+const Pose = require('./lib/pose.js')
+module.exports = Pose
