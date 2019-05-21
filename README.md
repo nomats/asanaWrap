@@ -17,7 +17,7 @@ Checker methods must return the form of XXXXXXX.
 ## Testing + Sample Data
 ## Importing into `Pose`
 ## Strictness
-### `PoseCheckerConstructor` methods
+### `PoseCheckerConstructor` helper methods
 All methods extended from the `PoseCheckerConstructor` class to help build checker functions.
 #### `_isPointBetween(point, boundary)`
 - **Returns `true` or `false` if `point` is between values in  `boundary`**
@@ -25,8 +25,8 @@ All methods extended from the `PoseCheckerConstructor` class to help build check
 
 | Arg        | description           | example  |
 | ------------- |:-------------:| -----:|
-| `point`      | *simple number type* | `5` |
-| `boundary`      | *array of length two* |   `[3,7]` |
+| `point`      | *number, one dimensional co-ordinate* | `5` |
+| `boundary`      | *array of length two, describes boundaries* |   `[3,7]` |
 ```
 //Example Usage
 this._isPointBetween(5, [3,7])
@@ -35,15 +35,119 @@ this._isPointBetween(5, [3,7])
 this._isPointBetween(3, [5,7])
   => false
 ```
-### `_isStraight(points, margin)`
-### `_isHorizontal(points, margin)`
+#### `_calculateAngle(edge1, middle, edge2)`
+- **Returns angle in degrees of `edge1`->`middle`->`edge2`**
+
+
+| Arg        | description           | example  |
+| ------------- |:-------------:| -----:|
+| `edge1`      | *position hash, first exterior point of angle* | `{x: 12, y: 5}` |
+| `middle`      | *position hash, position of point angle is about* |   `{x: 0, y: 0}` |
+| `edge2`      | *position hash, second exterior point of angle* |   `{x: 12, y: 0}` |
+```
+//Example Usage
+this._calculateAngle(
+  {x: 12, y: 5},
+  {x: 0, y: 0},
+  {x: 12, y: 0}
+)
+  => 23
+```
+
+#### `_isHorizontal(points, margin)`
 - **Returns `true` or `false` if `points` align horizontally within a `margin` of error**
 
 
 | Arg        | description           | example  |
 | ------------- |:-------------:| -----:|
-| `point`      | *simple number type* | `5` |
-| `boundary`      | *array of length two* |   `[3,7]` |
-### `_isStacked(points, margin)`
-### `_calculateAngle(edge1, middle, edge2)`
-convention over config, so any PRs which don't adhere will be rejected
+| `points`      | *array of position hashes* | `[{x:10, y:30}, {x:15, y:35}]` |
+| `margin`      | *number, describes acceptable margin of error* |   `10` |
+```
+//Example Usage
+this._isHorizontal(
+  [
+    {x: -1, y: 3},
+    {x: 1,y: 3.1},
+    {x: 3,y: 3.6}
+  ],
+  0.7
+  )
+  => true
+
+this._isHorizontal(
+  [
+    {x: -1, y: 3},
+    {x: 1,y: 2.2},
+    {x: 3,y: 4.5}
+  ],
+  0.7
+  )
+  => false
+```
+#### `_isStacked(points, margin)`
+- **Returns `true` or `false` if `points` align vertically within a `margin` of error**
+
+
+| Arg        | description           | example  |
+| ------------- |:-------------:| -----:|
+| `points`      | *array of position hashes* | `[{x:10, y:30}, {x:15, y:35}]` |
+| `margin`      | *number, describes acceptable margin of error* |   `10` |
+```
+//Example Usage
+this._isStacked(
+  [
+    {x: 3, y: -1},
+    {x: 3.1,y: 1},
+    {x: 3.6,y: 3}
+  ],
+  0.7
+  )
+  => true
+
+this._isStacked(
+  [
+      {x: 3, y: -1},
+      {x: 5,y: 1},
+      {x: 1,y: 3}
+  ],
+  0.7
+  )
+  => false
+```
+
+#### `_isStraight(points, margin)`
+- **Only use this method if a solution cannot be reached with `_isHorizontal` or `_isStacked`, as it's more computationally consumptive.**
+
+- **Returns `true` or `false` if `points` form a straight line within a  `margin` of error**
+
+
+| Arg        | description           | example  |
+| ------------- |:-------------:| -----:|
+| `points`      | *array of position hashes* | `[{x:10, y:30}, {x:15, y:35}]` |
+| `margin`      | *number, describes acceptable margin of error* |   `10` |
+```
+//Example Usage
+this._isStraight(
+  [
+    {x: -1, y: -1},
+    {x: 1,y: 1},
+    {x: 3,y: 3},
+    {x: 5,y: 5},
+    {x: 7, y:7}
+  ],
+  1
+)
+  => true
+
+this._isStraight(
+  [
+    {x: -1, y: -1},
+    {x: 1,y: 5},
+    {x: 3,y: 2},
+    {x: 5,y: 1},
+    {x: 7, y:6}
+  ],
+  1
+)
+  => false
+```
