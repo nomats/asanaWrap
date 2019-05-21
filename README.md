@@ -1,7 +1,7 @@
 # Contributors
 For anyone looking to contribute to the codebase, it's very encouraged! Primarily contribution entails adding your own pose checkers to the module. Any other spots for improvement should be made as seperate pull requests and not bundled in with a pose checker addition.
 
-## Adding a pose
+## Adding a new pose checker
 
 All pose checker functions are created by `CheckerConstructor` classes. To add a pose, create a new `CheckerConstructor` class in `/lib/pose_checkers` which extends the class `PoseCheckerConstructor`, found in `/lib/pose_checkers/pose_checker_constructor.js`.
 
@@ -11,12 +11,35 @@ Change the `Template` in `TemplateCheckerConstructor` to the name of the yoga po
 
 Change the contents of the `checker` function to implement your pose checks, making sure your function's output is in-keeping with convention, and your pose is ready to be imported into `Pose`! Nice!
 
+There are a number of helpers to make implementing your pose easier, so make sure to read the section on BODYPART and POSECHECKERCONSTRUCTOR helper methods, and take a look at some of the pre-existing `CheckerCondtructors` to get you started.
+
 ## Implementation Convention
 Checker methods must return the form of XXXXXXX.
 
 ## Testing + Sample Data
 ## Importing into `Pose`
 ## Strictness
+### `bodypart`
+`bodypart` is a handy wrapper which makes it easy to make calls to the original Posenet object for the position hashes of different body parts.
+
+In the scope of writing a `checker()` function, `bodypart` is callable on the wrappedPosenetObject. an Example from `/lib/pose_checkers/warrior_two.js`:
+```
+class WarriorTwoCheckerConstructor extends PoseCheckerConstructor {
+  checker(wrappedPosenetObject){
+    const criteria_1 = "Arms parallel to the ground";
+    const check_1 = this._isHorizontal(
+      [
+        wrappedPosenetObject.bodypart("rightWrist").position,
+        wrappedPosenetObject.bodypart("rightElbow").position,
+        wrappedPosenetObject.bodypart("rightShoulder").position,
+        wrappedPosenetObject.bodypart("leftShoulder").position,
+        wrappedPosenetObject.bodypart("leftElbow").position,
+        wrappedPosenetObject.bodypart("leftWrist").position
+      ],
+      15
+    );
+```
+
 ### `PoseCheckerConstructor` helper methods
 All methods extended from the `PoseCheckerConstructor` class to help build checker functions.
 #### `_isPointBetween(point, boundary)`
