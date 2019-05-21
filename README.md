@@ -17,17 +17,80 @@ Create a new pose checker function with the following steps:
 - adding it to the main Pose
 - don't break any tests and make a pull request! :)
 
-#### Creating a new `CheckerConstructor` file
+### Creating a new `CheckerConstructor` file
 1. Copy THE TEMPLATE file in `/contributor_resources/template_checker_constructor.js` into `/lib/pose_checkers`
 2. Rename the file `*_checker_constructor.js`, where `*` is the name of your pose in snake case.
 3. Rename all instances of `TemplateCheckerConstructor` with `*CheckerConstructor` where `*` is your pose name. Make sure it's in PascalCase.
-#### Creating sample data and unit tests
 
-#### Implementing your checker
+### Creating sample data and unit tests
+
+- Make two new files, `/spec/posenet_sample_data/*_test_sample.js` and `/spec/pose_checkers/*_checker_constructor.test.js`, where `*` is your pose name in `camel_case`.
+- Populate your sample data file. If you've never worked with posenet or generating posenet test data, take a look at our GUIDE.
+- Write at least two expected true tests and two expected false tests. (If you TDD, this can be gradual).
+**NOTE:** We largely leave it to your discretion how to import your sample data and test it, but if you'd like to stick to convention you can find examples in the `pose_checkers` directory. We would obviously love that :)
+**MORE NOTES:** We are not currently stubbing `PosenetObjectWrapper` due to it's fundamentality.
+
+
+### Implementing your checker
 Now it's time for the creative bit! Once inside the `checker()` function, you can make calls to get different bodyparts' positional hashes with `wrappedPosenetObject.bodypart("nose").position`. Use this in conjunction with the inherited HELPER FUNCTIONS to write a series of checks which determine if the pose is correct or not. If you're having trouble, check out other examples to see ways `checker()` has been implemented. **Make sure `checker()` returns an OBJECT OF THE CORRECT FORMAT**
 
-#### Adding your checker to `pose.js`
-Finally, add your checker to `/lib/pose.js` in the following format:
+#### Checker Format
+It's really worth taking a look at existing examples. Checkers are made up of matching checks and criteria. Criteria are strings describing the Yoga rule, e.g. *arms horizontal*. The corresponding check will be a boolean showing if the criteria has been met, for example:
+```
+const criteria_1 = "Arms parallel to the ground";
+const check_1 = this._isHorizontal(
+  [
+    wrappedPosenetObject.bodypart("rightWrist").position,
+    ...
+    wrappedPosenetObject.bodypart("leftWrist").position
+  ],
+  15
+);
+```
+Sometimes a criteria isn't describable in one check, so it's instead made of multiple sub checks:
+```
+const criteria_2 = "Knee bent and stacked over foot";
+var kneeAngle = this._calculateAngle(
+  wrappedPosenetObject.bodypart("rightHip").position,
+  wrappedPosenetObject.bodypart("rightKnee").position,
+  wrappedPosenetObject.bodypart("rightAnkle").position
+);
+const check_2a = kneeAngle > 85 && kneeAngle < 115;
+const check_2b = this._isStacked(
+  wrappedPosenetObject.bodypart("rightKnee").position,
+  wrappedPosenetObject.bodypart("rightAnkle").position
+);
+```
+in this case, the overall check for the criteria becomes `check_2a && check_2b`, since both checks need to be met for the whole criteria to be met.
+
+lastly, each `checker()` needs an `isCorrect` boolean. This boolean represents whether the entire pose has been achieved, and is thus a combination of all `check` booleans joined with `&&` operators:
+
+```
+const isCorrect = check_1 && check_2a && check_2b;
+```
+
+#### Checker return object
+your checker return object should return an array of the following:
+
+```
+return [
+  isCorrect,
+  [
+    [check_1, criteria_1],
+    [check_2a && check_2b, criteria_2],
+    ...
+    [check_i, criteria_i]
+  ]
+];
+```
+Therefore,
+- `checker(wrappedPosenetObject)[0]` => `isCorrect`
+- `checker(wrappedPosenetObject)[1]` => array of [overall_check, criteria]
+- `checker(wrappedPosenetObject)[1][i][0]` => overall check boolean of *i*<small><small>th</small></small> criteria
+- `checker(wrappedPosenetObject)[0][i][1]` => string description of *i*<small><small>th</small></small> criteria
+
+### Adding your checker to `pose.js`
+Add your checker to `/lib/pose.js` in the following format:
 ```
 //Poses --->
 ...
@@ -49,12 +112,7 @@ where all instances of `*` is **your checker name in camel case**.
 #### Pull request
 Lastly, make sure your new unit tests all pass, and make a pull request to dev!
 
-## Implementation Convention
-Checker methods must return the form of XXXXXXX.
 
-## Testing + Sample Data
-## Importing into `Pose`
-## Strictness
 ### `bodypart(bodypartName)`
 `bodypart` is a handy wrapper which makes it easy to make calls to the original Posenet object for the position hashes of different body parts.
 
