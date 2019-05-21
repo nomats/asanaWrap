@@ -17,4 +17,33 @@ Checker methods must return the form of XXXXXXX.
 ## Testing + Sample Data
 ## Importing into `Pose`
 ## Strictness
+### `PoseCheckerConstructor` methods
+All methods extended from the `PoseCheckerConstructor` class to help build checker functions.
+#### `_isPointBetween(point, boundary)`
+- **Returns `true` or `false` if `point` is between values in  `boundary`**
+
+
+| Arg        | description           | example  |
+| ------------- |:-------------:| -----:|
+| `point`      | *simple number type* | `5` |
+| `boundary`      | *array of length two* |   `[3,7]` |
+```
+//Example Usage
+this._isPointBetween(5, [3,7])
+  => true
+
+this._isPointBetween(3, [5,7])
+  => false
+```
+### `_isStraight(points, margin)`
+### `_isHorizontal(points, margin)`
+- **Returns `true` or `false` if `points` align horizontally within a `margin` of error**
+
+
+| Arg        | description           | example  |
+| ------------- |:-------------:| -----:|
+| `point`      | *simple number type* | `5` |
+| `boundary`      | *array of length two* |   `[3,7]` |
+### `_isStacked(points, margin)`
+### `_calculateAngle(edge1, middle, edge2)`
 convention over config, so any PRs which don't adhere will be rejected
