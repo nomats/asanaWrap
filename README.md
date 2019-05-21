@@ -2,6 +2,19 @@
 For anyone looking to contribute to the codebase, it's very encouraged! Primarily contribution entails adding your own pose checkers to the module. Any other spots for improvement should be made as seperate pull requests and not bundled in with a pose checker addition.
 
 ## Adding a new pose checker
+A pose checker is a function which when called on a `PosenetObjectWrapper` instance returns true or false depending whether the pose is correct in Yoga terms. These pose checker functions are created as functions of an instance of a `PoseCheckerConstructor` derived classes. A `PosenetObjectWrapper` is simply a Posenet wrapped up in something which gives it an intuitive `bodypart` interface.
+
+ Confused? Take a look at the example for WARRIORTWO. The `WarriorTwoCheckerConstructor` class re-writes the implementation of `checker()` (which it inherets from the parent class) to be a method which determines whether a `wrappedPosenetObject` passed to it is the Yoga pose *Warrior Two* or not. It does this by using a number of HELPER FUNCTIONS passed down through it's parent class, `PoseCheckerConstructor`. The checker is then exported with the use of `createBoundChecker()`; a static class method which creates an instance of `WarriorTwoCheckerConstructor`, binds `checker()` to said instance, and returns the checker function by itself. Thus we end up with a bound `checker()` for Warrior Two, with all it's underlying logic encapsulated away.
+
+### Implementation Overview
+
+ Almost all of this is pre-provided, so adding a new pose checker primarily consists of **developing a new implementation for `checker()` which determines true or false for your chosen pose.**
+
+Creating a new pose checker function consists of the following steps:
+- creating the file and Extending the class
+- creating unit tests / sample data for your checker (you can do the next step first if you aren't a TDD fan)
+- implementing your checker
+- adding it to the main Pose
 
 All pose checker functions are created by `CheckerConstructor` classes. To add a pose, create a new `CheckerConstructor` class in `/lib/pose_checkers` which extends the class `PoseCheckerConstructor`, found in `/lib/pose_checkers/pose_checker_constructor.js`.
 
