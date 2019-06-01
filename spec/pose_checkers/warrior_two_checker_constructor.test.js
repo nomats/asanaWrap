@@ -7,26 +7,26 @@ const PosenetObjectWrapper = require("../../lib/posenet_object_wrapper/main.js")
 describe("#isWarrior2", ()=>{
   it("can recognise correct position", () => {
     var input = new PosenetObjectWrapper(sample["correct"][0]);
-    expect(isWarriorTwo(input)[0]).toEqual(true);
+    expect(isWarriorTwo(input).isCorrect).toEqual(true);
   });
 
   it("can recognise correct position", () => {
     var input = new PosenetObjectWrapper(sample["correct"][1]);
-    expect(isWarriorTwo(input)[0]).toEqual(true);
+    expect(isWarriorTwo(input).isCorrect).toEqual(true);
   });
 
   it("can recognise incorrect position", () => {
     var input = new PosenetObjectWrapper(sample["incorrect"][0]);
-    expect(isWarriorTwo(input)[0]).toEqual(false);
+    expect(isWarriorTwo(input).isCorrect).toEqual(false);
   });
 
   it("can recognise incorrect position", () => {
     var input = new PosenetObjectWrapper(sample["incorrect"][1]);
-    expect(isWarriorTwo(input)[0]).toEqual(false);
+    expect(isWarriorTwo(input).isCorrect).toEqual(false);
   });
 
   it("can recognise incorrect position", () => {
     var input = new PosenetObjectWrapper(sample["incorrect"][2]);
-    expect(isWarriorTwo(input)[0]).toEqual(false);
+    expect(isWarriorTwo(input).isCorrect).toEqual(false);
   });
 })
