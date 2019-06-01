@@ -1,5 +1,5 @@
 const sample = require("../posenet_sample_data/warrior_two_test_sample.js");
-const isWarriorTwo = require("../../lib/pose_checkers/warrior_two.js");
+const isWarriorTwo = require("../../lib/pose_checkers/warrior_two_checker_constructor.js");
 const PosenetObjectWrapper = require("../../lib/posenet_object_wrapper/main.js")
 
 
