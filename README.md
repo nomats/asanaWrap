@@ -4,13 +4,14 @@ For anyone looking to contribute to the codebase, it's very encouraged! Primaril
 ## Adding a new pose checker
 A pose checker is a function which when called on a `PosenetObjectWrapper` instance returns true or false depending whether the pose is correct in Yoga terms. These pose checker functions are created as functions of an instance of a `PoseCheckerConstructor` derived classes. A `PosenetObjectWrapper` is simply a Posenet wrapped up in something which gives it an intuitive `bodypart` interface.
 
- Confused? Take a look at the example for WARRIORTWO. The `WarriorTwoCheckerConstructor` class re-writes the implementation of `checker()` (which it inherets from the parent class) to be a method which determines whether a `wrappedPosenetObject` passed to it is the Yoga pose *Warrior Two* or not. It does this by using a number of HELPER FUNCTIONS passed down through it's parent class, `PoseCheckerConstructor`. The checker is then exported with the use of `createBoundChecker()`; a static class method which creates an instance of `WarriorTwoCheckerConstructor`, binds `checker()` to said instance, and returns the checker function by itself. Thus we end up with a bound `checker()` for Warrior Two, with all it's underlying logic encapsulated away.
+ Confused? Take a look at the example for [Warrior Two](https://github.com/nomats/asanaWrap/blob/dev/lib/pose_checkers/warrior_two_checker_constructor.js). The `WarriorTwoCheckerConstructor` class re-writes the implementation of `checker()` (which it inherets from the parent class) to be a method which determines whether a `wrappedPosenetObject` passed to it is the Yoga pose *Warrior Two* or not. It does this by using a number of [helper functions](https://github.com/nomats/asanaWrap#posecheckerconstructor-helper-methods) passed down through it's parent class, `PoseCheckerConstructor`. The checker is then exported with the use of `createBoundChecker()`; a static class method which creates an instance of `WarriorTwoCheckerConstructor`, binds `checker()` to said instance, and returns the checker function by itself. Thus we end up with a bound `checker()` for Warrior Two, with all it's underlying logic encapsulated away.
 
 ### Implementation Overview
 
  Almost all of this is pre-provided, so adding a new pose checker primarily consists of **developing a new implementation for `checker()` which determines true or false for your chosen pose.**
 
 Create a new pose checker function with the following steps:
+- Branching off dev
 - creating the file and Extending the class
 - creating unit tests / sample data for your checker (you can do the next step first if you aren't a TDD fan)
 - implementing your checker (factoring return formatting)
@@ -18,7 +19,7 @@ Create a new pose checker function with the following steps:
 - don't break any tests and make a pull request! :)
 
 ### Creating a new `CheckerConstructor` file
-1. Copy THE TEMPLATE file in `/contributor_resources/template_checker_constructor.js` into `/lib/pose_checkers`
+1. Copy [the template](https://github.com/nomats/asanaWrap/blob/dev/contributor_resources/template_checker_constructor.js) file in `/contributor_resources/template_checker_constructor.js` into `/lib/pose_checkers`
 2. Rename the file `*_checker_constructor.js`, where `*` is the name of your pose in snake case.
 3. Rename all instances of `TemplateCheckerConstructor` with `*CheckerConstructor` where `*` is your pose name. Make sure it's in PascalCase.
 
@@ -27,12 +28,13 @@ Create a new pose checker function with the following steps:
 - Make two new files, `/spec/posenet_sample_data/*_test_sample.js` and `/spec/pose_checkers/*_checker_constructor.test.js`, where `*` is your pose name in `camel_case`.
 - Populate your sample data file. If you've never worked with posenet or generating posenet test data, take a look at our GUIDE.
 - Write at least two expected true tests and two expected false tests. (If you TDD, this can be gradual).
+- Add an integration test in `spec/integration_tests/pose.test.js` in a **new describe block**.
 **NOTE:** We largely leave it to your discretion how to import your sample data and test it, but if you'd like to stick to convention you can find examples in the `pose_checkers` directory. We would obviously love that :)
 **MORE NOTES:** We are not currently stubbing `PosenetObjectWrapper` due to it's fundamentality.
 
 
 ### Implementing your checker
-Now it's time for the creative bit! Once inside the `checker()` function, you can make calls to get different bodyparts' positional hashes with `wrappedPosenetObject.bodypart("nose").position`. Use this in conjunction with the inherited HELPER FUNCTIONS to write a series of checks which determine if the pose is correct or not. If you're having trouble, check out other examples to see ways `checker()` has been implemented. **Make sure `checker()` returns an OBJECT OF THE CORRECT FORMAT**
+Now it's time for the creative bit! Once inside the `checker()` function, you can make calls to get different bodyparts' positional hashes with `wrappedPosenetObject.bodypart("nose").position`. Use this in conjunction with the inherited [helper functions](https://github.com/nomats/asanaWrap#posecheckerconstructor-helper-methods) to write a series of checks which determine if the pose is correct or not. If you're having trouble, check out [other examples](https://github.com/nomats/asanaWrap/tree/dev/lib/pose_checkers) to see ways `checker()` has been implemented. **Make sure `checker()` returns a [correctly formatted object.](https://github.com/nomats/asanaWrap#checker-return-object)**
 
 #### Checker Format
 It's really worth taking a look at existing examples. Checkers are made up of matching checks and criteria. Criteria are strings describing the Yoga rule, e.g. *arms horizontal*. The corresponding check will be a boolean showing if the criteria has been met, for example:
@@ -107,7 +109,7 @@ class Pose {
   }
 }
 ```
-where all instances of `*` is **your checker name in camel case**.
+where all instances of `*` is **your checker name in snake_case/camelCase as appropriate**.
 
 #### Pull request
 Lastly, make sure your new unit tests all pass, and make a pull request to dev!
