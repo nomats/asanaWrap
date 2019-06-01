@@ -72,25 +72,25 @@ const isCorrect = check_1 && check_2a && check_2b;
 ```
 
 #### Checker return object
-your checker return object should return an array of the following:
+Your checker return object should be an object of the following form:
 
-```
-return [
-  isCorrect,
-  [
-    [check_1, criteria_1],
-    [check_2a && check_2b, criteria_2],
-    ...
-    [check_i, criteria_i]
+```javascript
+return {
+  isCorrect: isCorrect,
+  criteria: [
+    {
+      description: criteria_1_description,
+      check: check_1
+    },
+    {
+      description: criteria_2_description,
+      check: check_2a && check_2b
+    }
+    //...
   ]
-];
+}
 ```
-Therefore,
-- `checker(wrappedPosenetObject)[0]` => `isCorrect`
-- `checker(wrappedPosenetObject)[1]` => array of [overall_check, criteria]
-- `checker(wrappedPosenetObject)[1][i][0]` => overall check boolean of *i*<small><small>th</small></small> criteria
-- `checker(wrappedPosenetObject)[0][i][1]` => string description of *i*<small><small>th</small></small> criteria
-
+where `isCorrect` is the overall boolean which evaluates whether the pose is correct or not, `criteria` is an array of objects, each of which contain a `description` string and a `check` boolean. Each `description` string describes the criteria the user must meet, and each `check` boolean determines if that criteria is being met.
 ### Adding your checker to `pose.js`
 Add your checker to `/lib/pose.js` in the following format:
 ```

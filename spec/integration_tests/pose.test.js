@@ -11,10 +11,10 @@ describe("Pose#isWarriorTwo",()=>{
   })
   it("can determine a correct warrior two pose", ()=>{
     var subject = new Pose(correct_posenet_sample_object)
-    expect(subject.isWarriorTwo()[0]).toEqual(true)
+    expect(subject.isWarriorTwo().isCorrect).toEqual(true)
   })
   it("can determine an incorrect warrior two pose", ()=>{
     var subject = new Pose(incorrect_posenet_sample_object)
-    expect(subject.isWarriorTwo()[0]).toEqual(false)
+    expect(subject.isWarriorTwo().isCorrect).toEqual(false)
   })
 })
